@@ -1,0 +1,73 @@
+
+<!----- MODELO FOTOS
+
+$NomeDoFoto3x4 = $_FILES['Foto3x4']['name'];
+$NomeTemporarioFoto3x4 = $_FILES['Foto3x4']['tmp_name'];
+$TamanhoDoFoto3x4 = $_FILES['Foto3x4']['size'];
+
+
+
+if($NomeDoFoto3x4){
+
+$ExtensaoFoto3x4 = strtolower(pathinfo($NomeDoFoto3x4, PATHINFO_EXTENSION));
+$PermitirExtensaoFoto3x4  = array('jpeg', 'jpg', 'png');
+$NovoNomeFoto3x4 = time().'_'.rand(1000,9999).'.'.$ExtensaoFoto3x4;
+
+if(in_array($ExtensaoFoto3x4, $PermitirExtensaoFoto3x4)){
+	if($TamanhoDoFoto3x4 < 5000000){
+			
+			move_uploaded_file($NomeTemporarioFoto3x4 ,$upload_dir.$NovoNomeFoto3x4); 
+	}else{
+		$errorMsg = 'Arquivo muito grande';
+		echo $errorMsg;
+	}
+}else{
+	$errorMsg = 'Selecione um arquivo válido';
+	echo $errorMsg;
+}
+}else{
+
+$NovoNomeFoto3x4 = null; //nome coluna
+}
+
+----->
+
+
+
+			$NomeDoComprovanteUm = $_FILES['ComprovanteUm']['name'];
+			$NomeTemporarioComprovanteUm = $_FILES['ComprovanteUm']['tmp_name'];
+			$TamanhoDoComprovanteUm = $_FILES['ComprovanteUm']['size'];
+
+
+
+			if($NomeDoComprovanteUm){
+
+				$ExtensaoComprovanteUm = strtolower(pathinfo($NomeDoComprovanteUm, PATHINFO_EXTENSION));
+				$PermitirExtensaoComprovanteUm  = array('pdf');
+				$NovoNomeComprovanteUm = time().'_'.rand(1000,9999).'.'.$ExtensaoComprovanteUm;
+
+				if(in_array($ExtensaoComprovanteUm, $PermitirExtensaoComprovanteUm)){
+					if($TamanhoDoComprovanteUm < 5000000){
+			
+							move_uploaded_file($NomeTemporarioComprovanteUm ,$upload_dir.$NovoNomeComprovanteUm); 
+					}else{
+						$errorMsg = 'Arquivo muito grande';
+						echo $errorMsg;
+					}
+				}else{
+					$errorMsg = 'Selecione um arquivo válido';
+					echo $errorMsg;
+				}
+			}else{
+
+				$NovoNomeComprovanteUm = null; //nome coluna
+			}
+
+
+	
+
+
+			else{
+
+$NovoNomeComprovanteUm = null; //nome coluna
+}

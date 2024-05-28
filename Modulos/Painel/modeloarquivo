@@ -1,0 +1,65 @@
+
+    $NomeDoArquivo1 = $_FILES['arquivo1']['name'];
+    $NomeTemporarioArquivo1 = $_FILES['arquivo1']['tmp_name'];
+    $TamanhoDoArquivo1 = $_FILES['arquivo1']['size'];
+
+ 
+    
+    if($NomeDoArquivo1){
+   
+        $ExtensaoArquivo1 = strtolower(pathinfo($NomeDoArquivo1, PATHINFO_EXTENSION));
+        $PermitirExtensao1  = array('pdf');
+        $NovoNomeArquivo1 = time().'_'.rand(1000,9999).'.'.$ExtensaoArquivo1;
+    
+        if(in_array($ExtensaoArquivo1, $PermitirExtensao1)){
+              if($TamanhoDoArquivo1 < 5000000){
+                    unlink($upload_dir.$row['arquivo']);
+                    move_uploaded_file($NomeTemporarioArquivo1 ,$upload_dir.$NovoNomeArquivo1); 
+            }else{
+                $errorMsg1 = 'Arquivo muito grande';
+            }
+        }else{
+            $errorMsg1 = 'Selecione um arquivo válido';
+        }
+    }else{
+    
+        $NovoNomeArquivo1 = $row['arquivo'];
+    }
+    
+    
+
+
+    $imgName = $_FILES['image']['name'];
+    $imgTmp = $_FILES['image']['tmp_name'];
+    $imgSize = $_FILES['image']['size'];
+
+    if($imgName){
+
+        $imgExt = strtolower(pathinfo($imgName, PATHINFO_EXTENSION));
+
+        $allowExt  = array('jpeg', 'jpg', 'png', 'gif');
+
+        $userPic = time().'_'.rand(1000,9999).'.'.$imgExt;
+
+        if(in_array($imgExt, $allowExt)){
+
+            if($imgSize < 5000000){
+                unlink($upload_dir.$row['image']);
+                move_uploaded_file($imgTmp ,$upload_dir.$userPic);
+            }else{
+                $errorMsg = 'Image too large';
+            }
+        }else{
+            $errorMsg = 'Please select a valid image';
+        }
+    }else{
+
+        $userPic = $row['image'];
+    }
+
+
+    
+
+
+
+    ---
