@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Loteamento Veredas </title>
+  <title>Colônia de pesca </title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -97,8 +97,8 @@ unset($_SESSION['nao_autenticado']);
                       <button class="btn btn-primary w-100" type="submit">Login</button>
                     </div>
                     <div class="col-12">
-                    <p class="small mb-0">Não possui conta? <a href="<?php echo $url ?>CadastroUsuarioExterno/">Criar conta</a></p>
-                    <p class="small mb-0">Esqueceu a senha? <a href="Recuperar_Senha/recuperar_senha.php">Recuperar Senha</a></p>
+                   
+                    <p class="small mb-0">Esqueceu a senha? <a href="#">Recuperar Senha</a></p>
                     </div>
                   </form>
                 </div>
@@ -106,7 +106,7 @@ unset($_SESSION['nao_autenticado']);
 
               <div class="credits">
               
-                Feito por <a href="#">...</a>
+                Feito por <a href="https://rdownloads.rdsc.site">RD DOWNLOADS - GRUPO RDSC EMPREEDIMENTOS</a>
               </div>
 
             </div>
