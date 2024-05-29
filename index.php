@@ -49,7 +49,7 @@
        
               </div><!-- End Logo -->
               <br>
-              <span class="d-none d-lg-block">Loteamento Veredas</span>
+              <span class="d-none d-lg-block">Colonia de Pesca</span>
 <?php
 if(isset($_SESSION['nao_autenticado'])):
 ?>

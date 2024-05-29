@@ -1,2 +1,2 @@
-<?php $url = "http://localhost/public_html/ProjetoVeredas/"; ?>
-<?php //$url = "https://projetoveredas.rdsc.site/"; ?>
+<?php //$url = "http://localhost/public_html/coloniadepesca/"; ?>
+<?php $url = "https://coloniadepesca.rdsc.site/"; ?>
