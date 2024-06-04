@@ -44,7 +44,7 @@
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.php" class="logo d-flex align-items-center w-auto">
-                  <img style="width: 100%; height: 100%;" src="#" alt="">
+                  <img style="width: 100%; height: 100%;" src="assets/img/colonia.jpg" alt="">
                 </a>
        
               </div><!-- End Logo -->
