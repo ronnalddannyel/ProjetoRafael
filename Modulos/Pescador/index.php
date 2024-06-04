@@ -3,21 +3,19 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <?php include "../../header.php";
-require_once('../../../../db.php');
+require_once('../../../db.php');
 ?>
 </header>
 <body>
 <?php include "../../menu.php"; ?>
 <main id="main" class="main">
 <div class="pagetitle">
-      <h1>Reposições florestais parceladas</h1>
+      <h1>PESCADORES</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Início</a></li>
-                   <li class="breadcrumb-item active">DIFLOR</li>
-                   <li class="breadcrumb-item active">DRC</li>
-                   <li class="breadcrumb-item active">Reposição florestal parcelada</li>
-      </nav>
+                   <li class="breadcrumb-item active">Pescadores</li>
+              </nav>
 
 
 

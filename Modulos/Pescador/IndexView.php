@@ -1,6 +1,6 @@
 
 
-    </div><!--  Final breadcumb-->
+</div><!--  Final breadcumb-->
 <!-- Início painel de declarações -->
 <div class="col-12">
               <div class="card recent-sales overflow-auto">
@@ -12,10 +12,10 @@
                     <thead>
                       <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Quadra</th>
-                        <th scope="col">Tipo</th>
-                        <th scope="col">Lote</th>
-                        <th scope="col">Entrada</th>
+                        <th scope="col">Pescador</th>
+                        <th scope="col">CPF/CNPJ</th>
+                        <th scope="col">Número da Autex</th>
+                        <th scope="col">Validade da Autex</th>
                         <th scope="col">Opções</th>
                     
                       </tr>
@@ -23,7 +23,7 @@
                     <tbody>
 
                     <?php
-                        $sql = "SELECT * FROM dadoslotes ";
+                        $sql = "SELECT * FROM pescador ";
                       
                         $result = mysqli_query($conn, $sql);
                         if(mysqli_num_rows($result)){
@@ -33,10 +33,10 @@
 
                       <tr>
                       <td><?php echo $row['id'] ?></td>
-                      <td><?php echo $row['quantidade'] ?></td>
-                      <td><?php echo $row['tipo'] ?></td>
-                      <td><?php echo $row['lote'] ?></td>
-                      <td><?php echo $row['entrada'] ?></td>
+                      <td><?php echo $row['nome'] ?></td>
+                      <td><?php echo $row['cpf'] ?></td>
+                      <td><?php echo $row['nomePai'] ?></td>
+                      <td><?php echo $row['nomeMae'] ?></td>
                       <td>
                       <!--Enviar ID--->
                       <form action="./Editar.php" method="POST" enctype="multipart/form-data">
@@ -71,4 +71,4 @@
 </main>
 
 
-<?php include "../../footer.php"; ?>
+<?php include "../../../footer.php"; ?>

@@ -1,542 +1,307 @@
+<?php include "../../header.php"; ?>
+<?php require_once('../../../../db.php'); ?>
+<?php require_once('../../../../via_cep.php'); // Arquivo para a consulta do CEP ?>
+<?php $upload_dir = '../../ArquivosEnviados/'; ?>
+
 <?php
-include "../../header.php"; 
-require_once('../../../../db.php');
-$upload_dir = '../../ArquivosEnviados/';
-
-if (isset($_POST['Ret'])) {
-  $id =  base64_decode($_POST['IdEstoque']);
-  $sql = "select * from dadoslotes WHERE id=".$id;
-  $result = mysqli_query($conn, $sql);
-  if (mysqli_num_rows($result) > 0) {
-    $row = mysqli_fetch_assoc($result);
-       }else {
-   echo $errorMsg = 'Could not Find Any Record';
-  }
-}
-
+// Verificação do POST para atualizar os dados do pescador
 if (isset($_POST['Enviar'])) {
-   	
-	$quantidade = $_POST['quantidade'];
-	$lote = $_POST['lote'];
-	$Tipo = $_POST['Tipo'];
-	$fente = $_POST['fente'];
-  $logradouro = $_POST['logradouro'];
-	$valoPorMetroQd = $_POST['valoPorMetroQd'];
-	$area = $_POST['area'];
-	$precoDoLote = $_POST['precoDoLote'];
-	$entrada = $_POST['entrada'];
-	$saldoParaParcela = $_POST['saldoParaParcela'];
-	$parcela12 = $_POST['parcela12'];
-	$parcela24 = $_POST['parcela24'];
-	$NumeroProcesso = $_POST['NumeroProcesso'];
-	$parcela36 = $_POST['parcela36'];
-	$DataLiberacao = $_POST['DataLiberacao'];
-	$DataVencimento = $_POST['DataVencimento'];
-	$ComprovanteDois = $_POST['ComprovanteDois'];
-	$DataLiberacaoDois = $_POST['DataLiberacaoDois'];
-	$DataVencimentoDois = $_POST['DataVencimentoDois'];
-	$ComprovanteTres = $_POST['ComprovanteTres'];
-	$DataLiberacaoTres = $_POST['DataLiberacaoTres'];
-	$DataVencimentoTres = $_POST['DataVencimentoTres'];
-	$Obs = $_POST['Obs'];
-  $id = $_POST['id'];
+    // Recuperação dos dados do formulário
+    $nome = $_POST['nome'];
+    $nomePai = $_POST['nomePai'];
+    $nomeMae = $_POST['nomeMae'];
+    $dataDeNascimento = $_POST['dataDeNascimento'];
+    $foto3x4 = $_POST['foto3x4'];
+    $naturalidade = $_POST['naturalidade'];
+    $uf = $_POST['uf'];
+    $estadoCivil = $_POST['estadoCivil'];
+    $rg = $_POST['rg'];
+    $dataPrimeirorg = $_POST['dataPrimeirorg'];
+    $cpf = $_POST['cpf'];
+    $escolaridade = $_POST['escolaridade'];
+    $logradouro = $_POST['logradouro'];
+    $bairro = $_POST['bairro'];
+    $cep = $_POST['cep'];
+    $cidade = $_POST['cidade'];
+    $email = $_POST['email'];
+    $nomeDependente = $_POST['nomeDependente'];
+    $rgp = $_POST['rgp'];
+    $dataNascimentoDependente = $_POST['dataNascimentoDependente'];
+    $tituloDeEleitor = $_POST['tituloDeEleitor'];
+    $secao = $_POST['secao'];
+    $zona = $_POST['zona'];
+    $pis = $_POST['pis'];
+    $nit = $_POST['nit'];
 
+    // Consulta ViaCEP para obter informações adicionais do endereço
+    $endereco = buscarEnderecoPorCEP($cep);
 
+    // Atualização dos dados no banco de dados
+    $sql = "UPDATE pescador SET 
+            nome='$nome', 
+            nomePai='$nomePai', 
+            nomeMae='$nomeMae', 
+            dataDeNascimento='$dataDeNascimento', 
+            foto3x4='$foto3x4', 
+            naturalidade='$naturalidade', 
+            uf='$uf', 
+            estadoCivil='$estadoCivil', 
+            rg='$rg', 
+            dataPrimeirorg='$dataPrimeirorg', 
+            cpf='$cpf', 
+            escolaridade='$escolaridade', 
+            logradouro='$logradouro', 
+            bairro='$bairro', 
+            cep='$cep', 
+            cidade='$cidade', 
+            email='$email', 
+            nomeDependente='$nomeDependente', 
+            rgp='$rgp', 
+            dataNascimenteoDependente='$dataNascimentoDependente', 
+            tituloDeEleitor='$tituloDeEleitor', 
+            secao='$secao', 
+            zona='$zona', 
+            pis='$pis', 
+            nit='$nit'
+            WHERE id=".$_POST['id'];
 
+    $result = mysqli_query($conn, $sql);
 
-  $sql3 = "SELECT * FROM dadoslotes WHERE id=".$id;
-  $result3 = mysqli_query($conn, $sql3);
-      if(mysqli_num_rows($result3)){
-          $row2 = mysqli_fetch_assoc($result3);
-         
-
-      }
-
-
-	$NomeDoAnexo1 = $_FILES['Anexo1']['name'];
-	$NomeTemporarioAnexo1 = $_FILES['Anexo1']['tmp_name'];
-	$TamanhoDoAnexo1 = $_FILES['Anexo1']['size'];
-
-
-
-	if($NomeDoAnexo1){
-
-		$ExtensaoAnexo1 = strtolower(pathinfo($NomeDoAnexo1, PATHINFO_EXTENSION));
-		$PermitirExtensaoAnexo1  = array('pdf');
-		$NovoNomeAnexo1 = time().'_'.rand(1000,9999).'.'.$ExtensaoAnexo1;
-
-		if(in_array($ExtensaoAnexo1, $PermitirExtensaoAnexo1)){
-			if($TamanhoDoAnexo1 < 5000000){
-          unlink($upload_dir.$row2['Anexo1']); //nome coluna
-					move_uploaded_file($NomeTemporarioAnexo1 ,$upload_dir.$NovoNomeAnexo1); 
-			}else{
-				$errorMsg = 'Arquivo muito grande';
-				echo $errorMsg;
-			}
-		}else{
-			$errorMsg = 'Selecione um arquivo válido';
-			echo $errorMsg;
-		}
-	} else{ 
-        $NovoNomeAnexo1 = $row2['Anexo1']; 
-  
+    if ($result) {
+        $successMsg = 'Registro atualizado com sucesso';
+        header('Location: ./');
+    } else {
+        $errorMsg = 'Erro ao atualizar o registro: '.mysqli_error($conn);
+    }
 }
 
-
-$NomeDoAnexo2 = $_FILES['Anexo2']['name'];
-$NomeTemporarioAnexo2 = $_FILES['Anexo2']['tmp_name'];
-$TamanhoDoAnexo2 = $_FILES['Anexo2']['size'];
-
-
-
-if($NomeDoAnexo2){
-
-  $ExtensaoAnexo2 = strtolower(pathinfo($NomeDoAnexo2, PATHINFO_EXTENSION));
-  $PermitirExtensaoAnexo2  = array('pdf');
-  $NovoNomeAnexo2 = time().'_'.rand(1000,9999).'.'.$ExtensaoAnexo2;
-
-  if(in_array($ExtensaoAnexo2, $PermitirExtensaoAnexo2)){
-    if($TamanhoDoAnexo2 < 5000000){
-        unlink($upload_dir.$row2['Anexo2']); //nome coluna
-        move_uploaded_file($NomeTemporarioAnexo2 ,$upload_dir.$NovoNomeAnexo2); 
-    }else{
-      $errorMsg = 'Arquivo muito grande';
-      echo $errorMsg;
+// Recuperação do pescador a ser editado
+if (isset($_POST['Ret'])) {
+    $id =  base64_decode($_POST['IdEstoque']);
+    $sql = "SELECT * FROM pescador WHERE id=".$id;
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+    } else {
+        $errorMsg = 'Não foi possível encontrar nenhum registro';
     }
-  }else{
-    $errorMsg = 'Selecione um arquivo válido';
-    echo $errorMsg;
-  }
-} else{ 
-      $NovoNomeAnexo2 = $row2['Anexo2']; 
-
 }
-
-$NomeDoAnexo3 = $_FILES['Anexo3']['name'];
-$NomeTemporarioAnexo3 = $_FILES['Anexo3']['tmp_name'];
-$TamanhoDoAnexo3 = $_FILES['Anexo3']['size'];
-
-
-
-if($NomeDoAnexo3){
-
-  $ExtensaoAnexo3 = strtolower(pathinfo($NomeDoAnexo3, PATHINFO_EXTENSION));
-  $PermitirExtensaoAnexo3  = array('pdf');
-  $NovoNomeAnexo3 = time().'_'.rand(1000,9999).'.'.$ExtensaoAnexo3;
-
-  if(in_array($ExtensaoAnexo3, $PermitirExtensaoAnexo3)){
-    if($TamanhoDoAnexo3 < 5000000){
-        unlink($upload_dir.$row2['Anexo3']); //nome coluna
-        move_uploaded_file($NomeTemporarioAnexo3 ,$upload_dir.$NovoNomeAnexo3); 
-    }else{
-      $errorMsg = 'Arquivo muito grande';
-      echo $errorMsg;
-    }
-  }else{
-    $errorMsg = 'Selecione um arquivo válido';
-    echo $errorMsg;
-  }
-} else{ 
-      $NovoNomeAnexo3 = $row2['Anexo3']; 
-
-}
-
-
-
-//Envio para o banco de dados
-
-    if(!isset($errorMsg)){        
-
-      $sql = "SELECT * FROM ReposicaoParcelada WHERE id LIKE '%$id%'";
-      $result = mysqli_query($conn, $sql);
-          if(mysqli_num_rows($result)){
-              $row = mysqli_fetch_assoc($result);
-  
-          }
-                            
-    $sql = "UPDATE ReposicaoParcelada SET
-        quantidade = '".$quantidade."',
-        lote = '".$lote."',
-        Tipo = '".$Tipo."',
-        fente = '".$fente."',
-        logradouro = '".$logradouro."',
-        valoPorMetroQd = '".$valoPorMetroQd."',
-        area = '".$area."',
-        precoDoLote = '".$precoDoLote."',
-        entrada = '".$entrada."',
-        saldoParaParcela = '".$saldoParaParcela."',
-        parcela12 = '".$parcela12."',
-        parcela24 = '".$parcela24."',
-        NumeroProcesso = '".$NumeroProcesso."',
-        parcela36 = '".$parcela36."',
-        DataLiberacao = '".$DataLiberacao."',
-        DataVencimento = '".$DataVencimento."',
-        ComprovanteDois = '".$ComprovanteDois."',
-        DataLiberacaoDois = '".$DataLiberacaoDois."',
-        DataVencimentoDois = '".$DataVencimentoDois."',
-        ComprovanteTres = '".$ComprovanteTres."',
-        DataLiberacaoTres = '".$DataLiberacaoTres."',
-        DataVencimentoTres = '".$DataVencimentoTres."',
-        Obs = '".$Obs."',
-        Anexo1 = '".$NovoNomeAnexo1."',
-        Anexo2 = '".$NovoNomeAnexo2."',
-        Anexo3 = '".$NovoNomeAnexo3."'
-
-    WHERE id=".$id;
-
-    $result2 = mysqli_query($conn, $sql);
-    if($result2){
- $successMsg = 'New record updated successfully';
- echo  $successMsg;
- 
-    header('Location: ./');
-
-    }else{
-    $errorMsg = 'Error '.mysqli_error($conn);
-    echo $errorMsg;
-    }
-
-    }
-} 
-
 ?>
-
-
-
-
-
-
-
 
 <!DOCTYPE html>
 <html lang="pt-br">
-
-</header>
-
-
-
-
-
-
-
-<body>
-<?php include "../../../menu.php"; ?>
-
-<main id="main" class="main">
-
-
-
-<H1>Adicionar reposição parcelada</H1> 
-
-
-<section class="section">
-      <div class="row">
-        <div class="col-lg-10">
- 
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">Adicionar reposição parcelada</h5>
-              
-
-              <!-- General Form Elements -->
-              <form method="POST"  action="" enctype="multipart/form-data">
-                
-              
-
-<!--Campo Detentor-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Detentor</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="Detentor" placeholder="Insira Detentor aqui"  value="<?php echo $row['Detentor']; ?>">
-                  </div>
-                </div>
-<!--Final Campo Detentor-->
-
-<!--Campo CpfCnpj-->
-                <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">CPF/CNPJ</label>
-                  <div class="col-sm-7">
-                    <input name="CpfCnpj"  class="form-control cpfOuCnpj" type="text"   autocomplete="off" maxlength="14"   placeholder="Digite seu CPF ou CNPJ"  value="<?php echo $row['CpfCnpj']; ?>">
-                  </div>
-                </div>
-<!--Final Campo CpfCnpj-->
-
-
-
-<!--Campo ImovelVinculado-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Imóvel Vinculado</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="ImovelVinculado" placeholder="Insira o Imóvel Vinculado aqui"  value="<?php echo $row['ImovelVinculado']; ?>">
-                  </div>
-                </div>
-<!--Final Campo ImovelVinculado-->
-
-
-<!--Campo NumeroAutex-->
-          <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Número da Autex</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="NumeroAutex" placeholder="Insira Número da Autex aqui"  value="<?php echo $row['NumeroAutex']; ?>">
-                  </div>
-                </div>
-<!--Final Campo NumeroAutex-->
-
-
-<!--Campo ValidadeAutex-->
-                <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Validade da Autex</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="date" name="ValidadeAutex"   value="<?php echo $row['ValidadeAutex']; ?>">
-                  </div>
-                </div>
-<!--Final Campo ValidadeAutex-->
-
-
-<!--Campo ComprovacaoReposicao-->
-                <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Comprovação de Reposição</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="ComprovacaoReposicao" placeholder="Insira Comprovação de Reposição aqui"  value="<?php echo $row['ComprovacaoReposicao']; ?>">
-                  </div>
-                </div>
-<!--Final Campo ComprovacaoReposicao-->
-
-
-
-
-
-<!--Campo NumeroTcarf-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Número do Tcarf</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="NumeroTcarf" placeholder="Insira o Número do Tcarf aqui"  value="<?php echo $row['NumeroTcarf']; ?>">
-                  </div>
-                </div>
-<!--Final Campo NumeroTcarf-->
-
-
-
-<!--Campo entrada-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">entrada</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="entrada" placeholder="Insira o entrada aqui"  value="<?php echo $row['entrada']; ?>">
-                  </div>
-                </div>
-<!--Final Campo entrada-->
-
-
-<!--Campo saldoParaParcela-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">saldoParaParcela</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" name="saldoParaParcela" placeholder="Insira saldoParaParcela aqui"  value="<?php echo $row['saldoParaParcela']; ?>">
-                  </div>
-           </div>
-<!--Final Campo saldoParaParcela-->
-
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Tipo</label>
-                  <div class="col-sm-7">
-                    <select class="form-select" aria-label="Default select example" name="Tipo">
-                      <option selected><?php echo $row['Tipo']; ?></option>
-                      <option>Savana</option>
-                      <option>Floresta</option>
-                    </select>
-                  </div>
-                </div>
-
-
-
-<!--Campo VolumetriaLiberadaMetrosCubicos-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Volumetria Liberada M<sup>3</sup></label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira aVolumetria Liberada aqui" name="VolumetriaLiberadaMetrosCubicos"   value="<?php echo $row['VolumetriaLiberadaMetrosCubicos']; ?>">
-                  </div>
-           </div>
-<!--Final Campo VolumetriaLiberadaMetrosCubicos-->
-
-<!--Campo TotalMetrosCubicos-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Total M<sup>3</sup></label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira o Total aqui" name="TotalMetrosCubicos"   value="<?php echo $row['TotalMetrosCubicos']; ?>">
-                  </div>
-           </div>
-<!--Final Campo TotalMetrosCubicos-->
-
-<!--Campo NumeroProcesso-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Número do Processo </label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira Número do processo" name="NumeroProcesso"   value="<?php echo $row['NumeroProcesso']; ?>">
-                  </div>
-           </div>
-<!--Final Campo NumeroProcesso-->
-
-
-
-<!--Campo ComprovacaoInicialVintePorcentoMetrosCubicos-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Comprovação Inicial 20% M<sup>3</sup></label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira Comprovação Inicial 20% aqui" name="ComprovanteUm"   value="<?php echo $row['ComprovanteUm']; ?>">
-                  </div>
-           </div>
-<!--Final Campo ComprovacaoInicialVintePorcentoMetrosCubicos-->
-
-
-<!--Campo DataLiberacao-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">DataLiberacao m³</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="date"  name="DataLiberacao"   value="<?php echo $row['DataLiberacao']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DataLiberacao-->
-
-
-<!--Campo DataVencimento-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Data de Vencimento</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="date"  name="DataVencimento"   value="<?php echo $row['DataVencimento']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DataVencimento-->
-
-                  <!--Campo TresComprovacao-->
-                  <div class="row mb-3">
-                                  <label for="inputText" class="col-sm-2 col-form-label">1º Comprovação anexo</label>
-                                    <div class="col-sm-7">
-                                      <input  class="form-control" type="file" placeholder="Insira TresComprovacao aqui" name="Anexo1"   value="">
-                                      <a href="<?php echo $upload_dir.$row['Anexo1'] ?>" >Ver documento</a>
+    <head>
+        <!-- Adicione aqui os metadados, links CSS, etc. -->
+    </head>
+    <body>
+        <?php include "../../../menu.php"; ?>
+        <main id="main" class="main">
+            <h1>Editar Informações do Pescador</h1> 
+            <section class="section">
+                <div class="row">
+                    <div class="col-lg-10">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Editar Informações do Pescador</h5>
+                                <!-- Formulário para editar informações do pescador -->
+                                <form method="POST" action="" enctype="multipart/form-data">
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-2 col-form-label">Nome</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="nome" placeholder="Nome" value="<?php echo $row['nome']; ?>">
+                                        </div>
                                     </div>
-                            </div>
-                  <!--Final Campo TresComprovacao-->
-
-
-<!--Campo DoisComprovacao-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Dois Comprovacao</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira DoisComprovacao aqui" name="ComprovanteDois"   value="<?php echo $row['ComprovanteDois']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DoisComprovacao-->
-
-<!--Campo DataLiberacaoDois-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Data Liberacao Dois</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="date"  name="DataLiberacaoDois"   value="<?php echo $row['DataLiberacaoDois']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DataLiberacaoDois-->
-
-
-<!--Campo DataVencimentoDois-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Data Vencimento Dois</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira DataVencimentoDois aqui" name="DataVencimentoDois"   value="<?php echo $row['DataVencimentoDois']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DataVencimentoDois-->
-
-                  <!--Campo TresComprovacao-->
-                  <div class="row mb-3">
-                                  <label for="inputText" class="col-sm-2 col-form-label">2º Comprovação anexo</label>
-                                    <div class="col-sm-7">
-                                      <input  class="form-control" type="file" placeholder="Insira TresComprovacao aqui" name="Anexo2"   value="">
-                                      <a href="<?php echo $upload_dir.$row['Anexo2'] ?>" >Ver documento</a>
+                                    <!-- Adicione os campos restantes do formulário aqui -->
+                                    <!-- Exemplo: -->
+                                    <!-- Campo Nome do Pai -->
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-2 col-form-label">Nome do Pai</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="nomePai" placeholder="Nome do Pai" value="<?php echo $row['nomePai']; ?>">
+                                        </div>
                                     </div>
-                            </div>
-                  <!--Final Campo TresComprovacao-->
-
-<!--Campo TresComprovacao-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">TresComprovacao</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira o valor aqui" name="ComprovanteTres"   value="<?php echo $row['ComprovanteTres']; ?>">
-                  </div>
-           </div>
-<!--Final Campo TresComprovacao-->
-
-
-<!--Campo DataLiberacaoTres-->
-<div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">DataLiberacaoTres</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="date"  name="DataLiberacaoTres"   value="<?php echo $row['DataLiberacaoTres']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DataLiberacaoTres-->
-                  <!--Campo TresComprovacao-->
-                  <div class="row mb-3">
-                                  <label for="inputText" class="col-sm-2 col-form-label">3º Comprovação anexo</label>
-                                    <div class="col-sm-7">
-                                      <input  class="form-control" type="file" placeholder="Insira TresComprovacao aqui" name="Anexo3"   value="">
-                                      <a href="<?php echo $upload_dir.$row['Anexo3'] ?>" >Ver documento</a>
+                                    <!-- Campo Nome da Mãe -->
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-2 col-form-label">Nome da Mãe</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="text" name="nomeMae" placeholder="Nome da Mãe" value="<?php echo $row['nomeMae']; ?>">
+                                        </div>
                                     </div>
-                            </div>
-                  <!--Final Campo TresComprovacao-->
+                                    <!-- Campo Data de Nascimento -->
+                                    <div class="row mb-3">
+                                        <label for="inputText" class="col-sm-2 col-form-label">Data de Nascimento</label>
+                                        <div class="col-sm-7">
+                                            <input class="form-control" type="date" name="dataDeNascimento" value="<?php echo $row['dataDeNascimento']; ?>">
+                                        </div>
+                                    </div>
+                              
 
-
-<!--Campo DataVencimentoTres-->
+                                    <div class="col-sm-7">
+    <input class="form-control cpf" type="text" name="cpf" placeholder="CPF" value="<?php echo $row['cpf']; ?>">
+</div>
+</div>
+<!-- Campo Escolaridade -->
 <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">DataVencimentoTres</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="date" name="DataVencimentoTres"   value="<?php echo $row['DataVencimentoTres']; ?>">
-                  </div>
-           </div>
-<!--Final Campo DataVencimentoTres-->
-
-
-
-<!--Campo Obs-->
+    <label for="inputText" class="col-sm-2 col-form-label">Escolaridade</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="escolaridade" placeholder="Escolaridade" value="<?php echo $row['escolaridade']; ?>">
+    </div>
+</div>
+<!-- Campo Logradouro -->
 <div class="row mb-3">
-                <label for="inputText" class="col-sm-2 col-form-label">Obs</label>
-                  <div class="col-sm-7">
-                    <input  class="form-control" type="text" placeholder="Insira Obs aqui" name="Obs"   value="<?php echo $row['Obs']; ?>">
-                  </div>
-           </div>
-<!--Final Campo Obs-->
-
-                  <input type="hidden" class="form-control" name="id"  value="<?php echo $row['id']; ?>" >
-
-                <div class="row mb-3">
-                  <label class="col-sm-2 col-form-label">Editar</label>
-                  <div class="col-sm-3">
-                    <button type="Submit" name="Enviar" class="btn btn-primary">Editar</button>
-                  </div>
-                </div>
-
-              </form><!-- Finalização formulário cadastrar Reposição parcelada -->
-
-            </div>
-          </div>
-
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <label for="inputText" class="col-sm-2 col-form-label">Logradouro</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="logradouro" placeholder="Logradouro" value="<?php echo $row['logradouro']; ?>">
+    </div>
+</div>
+<!-- Campo Bairro -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Bairro</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="bairro" placeholder="Bairro" value="<?php echo $row['bairro']; ?>">
+    </div>
+</div>
+<!-- Campo CEP -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">CEP</label>
+    <div class="col-sm-7">
+        <input class="form-control cep" type="text" name="cep" placeholder="CEP" value="<?php echo $row['cep']; ?>">
+        <button type="button" class="btn btn-primary" onclick="buscarCEP()">Buscar CEP</button>
+    </div>
+</div>
+<!-- Campo Cidade -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Cidade</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="cidade" placeholder="Cidade" value="<?php echo $row['cidade']; ?>">
+    </div>
+</div>
+<!-- Campo UF -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">UF</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="uf" placeholder="UF" value="<?php echo $row['uf']; ?>">
+    </div>
+</div>
+<!-- Campo Email -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Email</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="email" name="email" placeholder="Email" value="<?php echo $row['email']; ?>">
+    </div>
+</div>
+<!-- Adicione os demais campos do formulário seguindo a mesma estrutura -->
+<!-- Exemplo: -->
+<!-- Campo Foto 3x4 -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Foto 3x4</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="foto3x4" placeholder="Foto 3x4" value="<?php echo $row['foto3x4']; ?>">
+    </div>
+</div>
+<!-- Campo Naturalidade -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Naturalidade</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="naturalidade" placeholder="Naturalidade" value="<?php echo $row['naturalidade']; ?>">
+    </div>
+</div>
+<!-- Campo Estado Civil -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Estado Civil</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="estadoCivil" placeholder="Estado Civil" value="<?php echo $row['estadoCivil']; ?>">
+    </div>
+</div>
+<!-- Campo RG -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">RG</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="rg" placeholder="RG" value="<?php echo $row['rg']; ?>">
+    </div>
+</div>
+<!-- Campo Data do Primeiro RG -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Data do Primeiro RG</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="date" name="dataPrimeirorg" value="<?php echo $row['dataPrimeirorg']; ?>">
+    </div>
+</div>
+<!-- Adicione os demais campos do formulário seguindo a mesma estrutura -->
+<!-- Exemplo: -->
+<!-- Campo Nome do Dependente -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Nome do Dependente</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="nomeDependente" placeholder="Nome do Dependente" value="<?php echo $row['nomeDependente']; ?>">
+    </div>
+</div>
+<!-- Campo RGP -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">RGP</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="rgp" placeholder="RGP" value="<?php echo $row['rgp']; ?>">
+    </div>
+</div>
+<!-- Campo Data de Nascimento do Dependente -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Data de Nascimento do Dependente</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="date" name="dataNascimenteoDependente" value="<?php echo $row['dataNascimenteoDependente']; ?>">
+    </div>
+</div>
+<!-- Adicione os demais campos do formulário seguindo a mesma estrutura -->
+<!-- Exemplo: -->
+<!-- Campo Título de Eleitor -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Título de Eleitor</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="tituloDeEleitor" placeholder="Título de Eleitor" value="<?php echo $row['tituloDeEleitor']; ?>">
+    </div>
+</div>
+<!-- Campo Seção -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Seção</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="secao" placeholder="Seção" value="<?php echo $row['secao']; ?>">
+    </div>
+</div>
+<!-- Campo Zona -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">Zona</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="zona" placeholder="Zona" value="<?php echo $row['zona']; ?>">
+    </div>
+</div>
+<!-- Campo PIS -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">PIS</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="pis" placeholder="PIS" value="<?php echo $row['pis']; ?>">
+    </div>
+</div>
+<!-- Campo NIT -->
+<div class="row mb-3">
+    <label for="inputText" class="col-sm-2 col-form-label">NIT</label>
+    <div class="col-sm-7">
+        <input class="form-control" type="text" name="nit" placeholder="NIT" value="<?php echo $row['nit']; ?>">
+    </div>
+</div>
+<!-- Adicione o botão de enviar -->
+<div class="row mb-3">
+    <div class="col-sm-7 offset-sm-2">
+        <button type="submit" name="Enviar" class="btn btn-primary">Enviar</button>
+    </div>
+</div>
+<!-- Adicione os scripts e estilos necessários -->
+</form>
+</div>
+</div>
+</div>
+</div>
+</section>
 </main>
-
-<?php include "../../../footer.php"; ?>
-
-
-
+<?php include "../../footer.php"; ?>
+<!-- Adicione os scripts e estilos necessários -->
+</body>
+</html>

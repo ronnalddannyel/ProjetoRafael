@@ -2,36 +2,32 @@
 require_once('../../../../db.php');
 $upload_dir = '../../ArquivosEnviados/';
 
-
 if (isset($_POST['Enviar'])) {
-   	
-	$Detentor = $_POST['Detentor'];
-	$CpfCnpj = $_POST['CpfCnpj'];
-	$Tipo = $_POST['Tipo'];
-	$ImovelVinculado = $_POST['ImovelVinculado'];
-    $NumeroAutex = $_POST['NumeroAutex'];
-	$ValidadeAutex = $_POST['ValidadeAutex'];
-	$ComprovacaoReposicao = $_POST['ComprovacaoReposicao'];
-	$NumeroTcarf = $_POST['NumeroTcarf'];
-	$Contrato = $_POST['Contrato'];
-	$Fomentadora = $_POST['Fomentadora'];
-	$VolumetriaLiberadaMetrosCubicos = $_POST['VolumetriaLiberadaMetrosCubicos'];
-	$TotalMetrosCubicos = $_POST['TotalMetrosCubicos'];
-	$NumeroProcesso = $_POST['NumeroProcesso'];
-	$ComprovanteUm = $_POST['ComprovanteUm'];
-	$DataLiberacao = $_POST['DataLiberacao'];
-	$DataVencimento = $_POST['DataVencimento'];
-	$ComprovanteDois = $_POST['ComprovanteDois'];
-	$DataLiberacaoDois = $_POST['DataLiberacaoDois'];
-	$DataVencimentoDois = $_POST['DataVencimentoDois'];
-	$ComprovanteTres = $_POST['ComprovanteTres'];
-	$DataLiberacaoTres = $_POST['DataLiberacaoTres'];
-	$DataVencimentoTres = $_POST['DataVencimentoTres'];
-	$Obs = $_POST['Obs'];
 
-
-
-
+    $nome = $_POST['nome'];
+    $nomePai = $_POST['nomePai'];
+    $nomeMae = $_POST['nomeMae'];
+    $dataDeNascimento = $_POST['dataDeNascimento'];
+    $naturalidade = $_POST['naturalidade'];
+    $uf = $_POST['uf'];
+    $estadoCivil = $_POST['estadoCivil'];
+    $rg = $_POST['rg'];
+    $dataPrimeirorg = $_POST['dataPrimeirorg'];
+    $cpf = $_POST['cpf'];
+    $escolaridade = $_POST['escolaridade'];
+    $logradouro = $_POST['logradouro'];
+    $bairro = $_POST['bairro'];
+    $cep = $_POST['cep'];
+    $cidade = $_POST['cidade'];
+    $email = $_POST['email'];
+    $nomeDependente = $_POST['nomeDependente'];
+    $rgp = $_POST['rgp'];
+    $dataNascimenteoDependente = $_POST['dataNascimenteoDependente'];
+    $tituloDeEleitor = $_POST['tituloDeEleitor'];
+    $secao = $_POST['secao'];
+    $zona = $_POST['zona'];
+    $pis = $_POST['pis'];
+    $nit = $_POST['nit'];
 
 
 
@@ -63,82 +59,14 @@ if (isset($_POST['Enviar'])) {
 
 
 
-	$NomeDoAnexo2 = $_FILES['Anexo2']['name'];
-	$NomeTemporarioAnexo2 = $_FILES['Anexo2']['tmp_name'];
-	$TamanhoDoAnexo2 = $_FILES['Anexo2']['size'];
-
-
-
-	if($NomeDoAnexo2){
-
-		$ExtensaoAnexo2 = strtolower(pathinfo($NomeDoAnexo2, PATHINFO_EXTENSION));
-		$PermitirExtensaoAnexo2  = array('pdf');
-		$NovoNomeAnexo2 = time().'_'.rand(1000,9999).'.'.$ExtensaoAnexo2;
-
-		if(in_array($ExtensaoAnexo2, $PermitirExtensaoAnexo2)){
-			if($TamanhoDoAnexo2 < 5000000){
-	
-					move_uploaded_file($NomeTemporarioAnexo2 ,$upload_dir.$NovoNomeAnexo2); 
-			}else{
-				$errorMsg = 'Arquivo muito grande';
-				echo $errorMsg;
-			}
-		}else{
-			$errorMsg = 'Selecione um arquivo válido';
-			echo $errorMsg;
-		}
-	}
-
-
-
-
-
-	$NomeDoAnexo3 = $_FILES['Anexo3']['name'];
-	$NomeTemporarioAnexo3 = $_FILES['Anexo3']['tmp_name'];
-	$TamanhoDoAnexo3 = $_FILES['Anexo3']['size'];
-
-
-
-	if($NomeDoAnexo3){
-
-		$ExtensaoAnexo3 = strtolower(pathinfo($NomeDoAnexo3, PATHINFO_EXTENSION));
-		$PermitirExtensaoAnexo3  = array('pdf');
-		$NovoNomeAnexo3 = time().'_'.rand(1000,9999).'.'.$ExtensaoAnexo3;
-
-		if(in_array($ExtensaoAnexo3, $PermitirExtensaoAnexo3)){
-			if($TamanhoDoAnexo3 < 5000000){
-	
-					move_uploaded_file($NomeTemporarioAnexo3 ,$upload_dir.$NovoNomeAnexo3); 
-			}else{
-				$errorMsg = 'Arquivo muito grande';
-				echo $errorMsg;
-			}
-		}else{
-			$errorMsg = 'Selecione um arquivo válido';
-			echo $errorMsg;
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 			
 
 		if(!isset($errorMsg)){
-			$sql = "insert into ReposicaoParcelada (Detentor, CpfCnpj, Tipo, ImovelVinculado, NumeroAutex, ValidadeAutex, ComprovacaoReposicao, NumeroTcarf, Contrato, Fomentadora,  VolumetriaLiberadaMetrosCubicos, TotalMetrosCubicos, NumeroProcesso, ComprovanteUm, DataLiberacao, DataVencimento, ComprovanteDois, DataLiberacaoDois, DataVencimentoDois, ComprovanteTres, DataLiberacaoTres, DataVencimentoTres, Obs, Anexo1, Anexo2, Anexo3)
-						values('".$Detentor."','".$CpfCnpj."', '".$Tipo."','".$ImovelVinculado."','".$NumeroAutex."','".$ValidadeAutex."', '".$ComprovacaoReposicao."', '".$NumeroTcarf."', '".$Contrato."', '".$Fomentadora."', '".$VolumetriaLiberadaMetrosCubicos."', '".$TotalMetrosCubicos."', '".$NumeroProcesso."', '".$ComprovanteUm."', '".$DataLiberacao."', '".$DataVencimento."', '".$ComprovanteDois."', '".$DataLiberacaoDois."', '".$DataVencimentoDois."', '".$ComprovanteTres."', '".$DataLiberacaoTres."', '".$DataVencimentoTres."', '".$Obs."', '".$NovoNomeAnexo1."', '".$NovoNomeAnexo2."', '".$NovoNomeAnexo3."')";
+			$sql = "insert into pescador (nome, nomePai, nomeMae, dataDeNascimento, foto3x4, naturalidade, uf, estadoCivil, rg, dataPrimeirorg, cpf, escolaridade, logradouro, bairro, cep, cidade, email, nomeDependente, rgp, dataNascimenteoDependente, tituloDeEleitor, secao, zona, pis, nit)
+						values('".$nome."','".$nomePai."', '".$nomeMae."', '".$dataDeNascimento."', '".$foto3x4."', '".$naturalidade."', '".$uf."', '".$estadoCivil."', '".$rg."', '".$dataPrimeirorg."', '".$CpfCnpj."', '".$escolaridade."', '".$logradouro."', '".$bairro."', '".$cep."', '".$cidade."', '".$email."', '".$nomeDependente."', '".$rgp."', '".$dataNascimenteoDependente."', '".$tituloDeEleitor."', '".$secao."', '".$zona."', '".$pis."', '".$nit."')";
+
 				$result = mysqli_query($conn, $sql);
 			if($result){
 				echo $successMsg = 'Cadastro concluído';
