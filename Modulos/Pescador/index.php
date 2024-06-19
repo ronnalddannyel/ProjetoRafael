@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <?php include "../../header.php";
-require_once('../../../db.php');
+//require_once('../../../db.php');
 ?>
 </header>
 <body>

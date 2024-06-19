@@ -49,7 +49,13 @@
                       <button type="submit" name="Ret"  class="btn btn-danger"><i class="bx bxs-trash"></i></button>   
                       <!--Fim enviar ID--->     
                       </form> 
-                      </td>
+                      <form action="./Deletar.php" method="POST" enctype="multipart/form-data">
+                      <input type="hidden" class="form-control" name="IdEstoque"  value="<?php echo base64_encode($row['id']); ?>" >
+                      <button type="submit" name="Ret"  class="btn btn-danger"><i class="bx bxs-trash"></i></button>   
+                      <!--Fim enviar ID--->     
+                      </form> 
+
+                    </td>
                       </tr>
 
 
