@@ -1,34 +1,31 @@
+<?php require_once('../../db.php');
+include "../../header.php"; 
+include "../../menu.php"; ?>
 
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<?php include "../../header.php";
-//require_once('../../../db.php');
-?>
-</header>
-<body>
-<?php include "../../menu.php"; ?>
 <main id="main" class="main">
+
+
 <div class="pagetitle">
-      <h1>PESCADORES</h1>
+      <h1>Administração - Sistema Único Femarh</h1>
       <nav>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="index.html">Início</a></li>
-                   <li class="breadcrumb-item active">Pescadores</li>
-              </nav>
+                   <li class="breadcrumb-item active">Estoque de peixe</li>
+                   <li class="breadcrumb-item active">Painel</li>
+        </ol>
+      </nav>
+ 
+    </div><!--  Final breadcumb-->
 
 
 
-      
 
 
-      <?php
-      
-      
-      include 'IndexView.php';
-      
-      /*
+    <?php
 // Inicia a sessão
+
+$_SESSION['NivelDeAcesso'] = 'Admin';
+
 // Verifica se o usuário está logado
 if (isset($_SESSION['NivelDeAcesso'])) {
     // Verifica o nível de acesso do usuário
@@ -36,7 +33,7 @@ if (isset($_SESSION['NivelDeAcesso'])) {
         // Código para administradores
         echo "Bem-vindo, administrador!";
         include 'IndexView.php';
-    } elseif ($_SESSION['NivelDeAcesso'] == 'DivFlor') {
+    } elseif ($_SESSION['NivelDeAcesso'] == 'DirDmca') {
         // Código para moderadores
         echo "Bem-vindo! Acesso";
         include 'IndexView.php';
@@ -49,7 +46,17 @@ if (isset($_SESSION['NivelDeAcesso'])) {
     // Redireciona o usuário para a página de login
     header('Location: index.php');
     exit();
-}*/
+}
 ?>
+
+<?php include "../../footer.php"; ?>
+
+
+
+
+
+
+
+
 
 
